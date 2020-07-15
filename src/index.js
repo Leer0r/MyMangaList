@@ -122,7 +122,8 @@ ipcMain.on("Read_manga", function (e, external_link) {
 //Load local manga when main html scripts ready
 
 ipcMain.on("Ready_to_add", function () {
-    loadManga()
+    loadPreference();
+    loadManga();
 })
 
 ipcMain.on("scan:add", function (e, manga_name) {
@@ -271,7 +272,14 @@ const mainMenuTemplate = [{
         click() {
             createAddWindow();
         },
-    },],
+    },
+    {
+        label: "Changer de theme",
+        click() {
+            changeTheme();
+        }
+    }
+    ],
 },
 ];
 
@@ -294,6 +302,11 @@ const addMenuTemplate = [{
     ]
 }];
 
+function loadPreference() {
+    let usr_preferences = JSON.parse(fs.readFileSync(path.join(__dirname, "./ressource/usr_preferences/usr_preferences.json")))
+    mainWindow.webContents.send("preferences", usr_preferences);
+}
+
 function loadManga() {
     let manga_json = fs.readFileSync(path.join(__dirname, data_path, "local_data/manga_data.json"))
     if (manga_json == "") {
@@ -305,3 +318,10 @@ function loadManga() {
     }
 }
 
+function changeTheme() {
+    usr_preferences = fs.readFileSync(path.join(__dirname, "./ressource/usr_preferences/usr_preferences.json"));
+    usr_preferences = JSON.parse(usr_preferences);
+    usr_preferences["defaultTheme"] = usr_preferences["defaultTheme"] === "light" ? "dark" : "light";
+    fs.writeFile(path.join(__dirname, "./ressource/usr_preferences/usr_preferences.json"), JSON.stringify(usr_preferences, null, 4));
+    mainWindow.webContents.send("changeTheme")
+}

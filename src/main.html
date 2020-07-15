@@ -8,13 +8,6 @@
 
 <body>
     <script defer>
-        /*
-
-        document.body.querySelectorAll('.global_div').forEach(global_div => {
-            global_div.addEventListener(...);
-        });
-
-        */
         const {
             electron,
             ipcRenderer
@@ -315,6 +308,10 @@
             document.querySelector("#inner").appendChild(createManga(item));
         });
 
+        ipcRenderer.on("changeTheme", () => {
+            document.querySelector("#window").classList.toggle("light");
+        })
+
         ipcRenderer.on("manga:double", function () {
             var modal = document.getElementById("myModal");
             document.getElementById('error_verbose').innerText = "Le manga existe déjà localement";
@@ -386,6 +383,12 @@
 
         ipcRenderer.on("send_information", (e, item) => {
             document.body.innerHTML += item
+        })
+        ipcRenderer.on("preferences", (e, item) => {
+            if (item["defaultTheme"] === "dark") {
+                document.querySelector("#window").classList.toggle("light");
+            }
+            console.log(item)
         })
         ipcRenderer.send("Ready_to_add");
     </script>
