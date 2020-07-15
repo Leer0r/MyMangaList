@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ajouter un manga</title>
+  <link rel="stylesheet" href="input_style.css" />
+</head>
+
+<body>
+  <script data-main="inputWindow.js" src="../script/js/require.js" defer></script>
+  <h1>Ajouter un manga</h1>
+  <div class="form_container">
+    <form>
+      <div class="manga_name_container">
+        <label for="manga_name">Le nom de votre manga</label>
+        <input type="text" id="manga_name" autofocus required />
+      </div>
+      <div class="scan_current_container">
+        <label for="manga_scan">Quel est le scan courant ?</label>
+        <input type="number" id="manga_scan" />
+      </div>
+      <div class="web_reader_container">
+        <label for="web_reader">Lien du site de lecture du manga</label>
+        <input type="url" id="web_reader" />
+      </div>
+      <div class="appreciation_container">
+        <label for="appreciation">Votre appréciation du manga</label>
+        <input list="note" id="appreciation" required />
+
+        <datalist id="note">
+          <option value="Pas vu"></option>
+          <option value="Genial"></option>
+          <option value="Moyen"></option>
+          <option value="Bof"></option>
+        </datalist>
+      </div>
+
+      <div class="additionnal-commentary_container">
+        <label for="additionnal-commentary">Commentaire sur le manga</label>
+        <input type="text" id="additionnal-commentary" />
+      </div>
+      <div class="button_container">
+        <button type="submit">Ajouter ce manga</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

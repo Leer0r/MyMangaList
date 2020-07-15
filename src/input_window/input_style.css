@@ -1,0 +1,11 @@
+body {
+    overflow-y: hidden;
+}
+
+form {
+    display: block;
+}
+
+form input {
+    width: 70%;
+}

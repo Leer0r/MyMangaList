@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>MymangaList</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script defer>
+        /*
+
+        document.body.querySelectorAll('.global_div').forEach(global_div => {
+            global_div.addEventListener(...);
+        });
+
+        */
+        const {
+            electron,
+            ipcRenderer
+        } = require('electron');
+
+        const ul = document.querySelector('#manga_list_container');
+
+
+        // Ajoute un nouveau manga dans le DOM
+        const createManga = item => {
+            // main container
+            const newManga = document.createElement('div');
+
+            let manga_id = item["manga_local_name"].replace(/\+/gi, "_").replace(/\!/gi, "").toLowerCase();
+
+            // Manga name
+            newManga.classList.add('global_div');
+            newManga.id = manga_id;
+
+            // image container
+            const container = document.createElement('div');
+            container.classList.add('img_container');
+            container.style.backgroundImage = `url('data/${item["manga_local_name"]}/img.jpg')`
+
+            //scan container
+            const scan_container = document.createElement('div');
+            scan_container.classList.add("scan_container");
+
+            //Number scan container
+            number_scan_container = document.createElement('div');
+            number_scan_container.classList.add('number_scan_container');
+            number_scan_container.innerText = item["scan"];
+
+            scan_container.appendChild(number_scan_container);
+            container.appendChild(scan_container);
+
+            newManga.appendChild(container)
+
+            //Info contrainer
+            info_container = document.createElement("div");
+            info_container.classList.add("infos_container");
+
+            //title container
+            title_container = document.createElement('h2');
+            title_container.classList.add("title_container");
+            title_container.innerText = item["manga_name"]
+
+            info_container.appendChild(title_container);
+
+            //link container
+            link_container = document.createElement("div");
+            link_container.classList.add("link_container");
+
+            //link
+            link = document.createElement("a");
+            link.setAttribute("href", item['link']);
+            link.innerText = "Lire le manga";
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                let link = document.querySelector(`#${manga_id} .infos_container .link_container a`)
+                    .getAttribute("href");
+                if (link === "") {
+                    return;
+                }
+                ipcRenderer.send("Read_manga", link);
+            });
+
+            link_container.appendChild(link);
+            info_container.appendChild(link_container)
+
+            newManga.appendChild(info_container);
+
+            //Description container
+            description_container = document.createElement("div");
+            description_container.classList.add('description_container');
+            description_container.innerHTML = item['synopsis'];
+            description_container.style.display = "block"
+
+            info_container.appendChild(description_container);
+
+            let avis_container = document.createElement("div");
+            avis_container.classList.add("avis_container");
+            avis_container.innerText = item["appreciation"];
+
+            info_container.appendChild(avis_container);
+
+            let comment_container = document.createElement("div");
+            comment_container.classList.add("comment_container");
+            comment_container.innerText = item["comment"];
+
+            info_container.appendChild(comment_container);
+
+            let change_button = document.createElement('button');
+            change_button.classList.add("change_button");
+            change_button.onclick = function () {
+                div_description = document.querySelector(
+                    `#${manga_id} .infos_container .description_container`);
+                if (div_description.style.display === "block") {
+                    div_description.style.display = "none";
+                    document.querySelector(`#${manga_id} .infos_container .avis_container`).style.display =
+                        "block";
+                    document.querySelector(`#${manga_id} .infos_container .comment_container`).style.display =
+                        "block";
+                } else {
+                    div_description.style.display = "block";
+                    document.querySelector(`#${manga_id} .infos_container .avis_container`).style.display =
+                        "none";
+                    document.querySelector(`#${manga_id} .infos_container .comment_container`).style.display =
+                        "none";
+                }
+            }
+            newManga.appendChild(change_button);
+
+            newManga.appendChild(info_container);
+
+            //Button container
+            button_option_container = document.createElement('div');
+            button_option_container.classList.add('button_option_container');
+            button_option_container.appendChild(document.createElement("span"));
+
+
+
+            //Option container
+            option_container = document.createElement('div');
+            option_container.classList.add('options_container');
+
+            button_option_container.addEventListener("click", () => {
+                document.querySelector(`#${manga_id} .options_container`).classList.toggle(
+                    "open");
+            })
+
+            newManga.appendChild(button_option_container)
+            cancel = document.createElement("div");
+            cancel.classList.add("cancel");
+            cancel.addEventListener('click', () => {
+                document.querySelector(`#${manga_id} .options_container`).classList.toggle(
+                    "open");
+            })
+
+            edit = document.createElement("div");
+            edit.classList.add("edit");
+            edit.classList.add(item["manga_local_name"])
+
+            edit.addEventListener("click", () => {
+                let form = document.createElement("form")
+                form.setAttribute("method", "POST");
+                form.setAttribute("action", "");
+
+                let div_scan = document.createElement('div');
+                div_scan.id = "input"
+
+                let label_scan = document.createElement("label");
+                label_scan.setAttribute("for", "input_scan");
+                label_scan.innerText = "Scan courant";
+
+                div_scan.appendChild(label_scan);
+
+                let input_scan = document.createElement("input");
+                input_scan.setAttribute("value", document.querySelector(
+                    `#${manga_id} .img_container .scan_container .number_scan_container`).innerText);
+                input_scan.setAttribute("id", 'input_scan');
+                input_scan.setAttribute("type", 'number');
+
+                div_scan.appendChild(input_scan);
+                form.appendChild(div_scan);
+
+                //web input
+                let div_web = document.createElement("div");
+                div_web.id = "web"
+                let label_web = document.createElement("label");
+                label_web.setAttribute("for", "input_web");
+                label_web.innerText = "Site de lecture";
+                div_web.appendChild(label_web)
+
+                let input_web = document.createElement("input");
+                input_web.setAttribute("value", document.querySelector(
+                    `#${manga_id} .infos_container .link_container a`).getAttribute("href"));
+                input_web.setAttribute("id", 'input_web');
+                input_web.setAttribute("type", 'url');
+
+                div_web.appendChild(input_web)
+                form.appendChild(div_web);
+
+                //appreciation input
+                let div_appreciation = document.createElement("div");
+                div_appreciation.id = "appreciation";
+                let label_appreciation = document.createElement("label");
+                label_appreciation.setAttribute("for", "input_appreciation");
+                label_appreciation.innerText = "Appreciation"
+                div_appreciation.appendChild(label_appreciation);
+
+                let input_appreciation = document.createElement("input");
+                input_appreciation.setAttribute("list", 'note');
+                input_appreciation.setAttribute("value", document.querySelector(
+                    `#${manga_id} .infos_container .avis_container`).innerText);
+                input_appreciation.setAttribute("id", 'input_appreciation');
+
+                div_appreciation.appendChild(input_appreciation);
+
+                let datalist = document.createElement("datalist");
+                datalist.id = "note"
+
+                opt1 = document.createElement("option");
+                opt1.setAttribute('value', "Pas Vu");
+
+                opt2 = document.createElement("option");
+                opt2.setAttribute("value", "Génial");
+
+                opt3 = document.createElement("option");
+                opt3.setAttribute("value", "Moyen");
+
+                opt4 = document.createElement("option");
+                opt4.setAttribute("value", "Bof");
+                datalist.appendChild(opt1);
+                datalist.appendChild(opt2);
+                datalist.appendChild(opt3);
+                datalist.appendChild(opt4);
+                div_appreciation.appendChild(datalist);
+
+                form.appendChild(div_appreciation);
+
+                let commentare_div = document.createElement("div");
+                commentare_div.id = "commentaire";
+
+                let label_commentaire = document.createElement("label");
+                label_commentaire.setAttribute("for", "input_commentaire");
+                label_commentaire.innerText = "Commentaire";
+
+                commentare_div.appendChild(label_commentaire);
+
+                let input_commentaire = document.createElement("input");
+                input_commentaire.setAttribute("value", document.querySelector(
+                    `#${manga_id} .infos_container .comment_container`).innerText)
+                input_commentaire.setAttribute("id", "input_commentaire");
+
+                commentare_div.appendChild(input_commentaire);
+
+                form.appendChild(commentare_div)
+
+                let submit_button = document.createElement("button");
+                submit_button.setAttribute("type", "submit");
+                submit_button.onclick = function (e) {
+                    e.preventDefault();
+                    let send_manga = new Object;
+                    send_manga["scan_div"] = document.querySelector("#input_scan").value;
+                    send_manga["web_div"] = document.querySelector("#input_web").value;
+                    send_manga["appreciation_div"] = document.querySelector("#input_appreciation")
+                        .value;
+                    send_manga["commentaire_div"] = document.querySelector("#input_commentaire").value;
+                    send_manga["manga_name"] = item['manga_local_name'];
+                    ipcRenderer.send("manga:update", send_manga);
+                    document.querySelector(
+                            `#${manga_id} .img_container .scan_container .number_scan_container`)
+                        .innerText = send_manga["scan_div"];
+                    document.querySelector(
+                        `#${manga_id} .infos_container .link_container a`).href = send_manga[
+                        "web_div"];
+                    document.querySelector(
+                        `#${manga_id} .infos_container .avis_container`).innerText = send_manga[
+                        "appreciation_div"];
+                    document.querySelector(
+                        `#${manga_id} .infos_container .comment_container`).innerText = send_manga[
+                        "commentaire_div"];
+                    document.getElementById('error_verbose').innerHTML = "";
+                    document.querySelector("#myModal").style.display = "none";
+                }
+                submit_button.innerHTML = "actualiser";
+
+                form.appendChild(submit_button);
+
+                document.getElementById('error_verbose').appendChild(form);
+                document.getElementById("myModal").style.display = 'block';
+
+
+            })
+
+            remove = document.createElement("div");
+            remove.classList.add('remove');
+
+            remove.addEventListener("click", () => {
+                document.querySelector(`#${manga_id}`).remove();
+                ipcRenderer.send("manga:remove", item["manga_local_name"]);
+            })
+
+            option_container.appendChild(cancel);
+            option_container.appendChild(edit);
+            option_container.appendChild(remove);
+
+
+            newManga.appendChild(option_container);
+
+            return newManga
+        }
+
+
+        // detect if user add a manga
+        ipcRenderer.on('manga:add', (e, item) => {
+            document.querySelector("#inner").appendChild(createManga(item));
+        });
+
+        ipcRenderer.on("manga:double", function () {
+            var modal = document.getElementById("myModal");
+            document.getElementById('error_verbose').innerText = "Le manga existe déjà localement";
+            modal.style.display = "block";
+        })
+        ipcRenderer.on("manga:unfindable", function (e, item) {
+            var modal = document.getElementById("myModal");
+            var span = document.getElementsByClassName("close")[0];
+            var error_verbose = document.getElementById('error_verbose');
+
+            //first paragraph
+            let p1 = document.createElement("p");
+            p1.innerText =
+                `Le manga ${item["manga_name"]} n'as pas été trouvé... J'utilise un script python qui va chercher le manga souhaité sur le site Nautiljon`;
+
+            error_verbose.appendChild(p1);
+
+            //First line break
+            error_verbose.appendChild(document.createElement("br"));
+
+            //first link
+            let a1 = document.createElement("a");
+            a1.setAttribute("href", "https://www.nautiljon.com/");
+            a1.textContent = "https://www.nautiljon.com/";
+
+            error_verbose.appendChild(a1)
+
+            //Second line break
+            error_verbose.appendChild(document.createElement("br"));
+
+            //Second paragraph
+            let p2 = document.createElement("p");
+            p2.innerText =
+                `mais ce dernier étant un peu capricieux, il se peut que l'ortographe ne soit pas la bonne, je met ici le lien de la recherche sur le site :`;
+
+            error_verbose.appendChild(p2);
+
+            //Line break
+            error_verbose.appendChild(document.createElement("br"));
+
+            //Second link
+            let a2 = document.createElement("a");
+            a2.setAttribute("href", `"https://www.nautiljon.com/search.php?q=${item["manga_search_name"]}"`)
+            a2.innerText = `"https://www.nautiljon.com/search.php?q=${item["manga_search_name"]}"`;
+
+            error_verbose.appendChild(a2);
+
+            //Line break
+            error_verbose.appendChild(document.createElement("br"));
+
+            let p3 = document.createElement("p");
+            p3.innerText = "Pensez à vérifier l'ortographe du manga";
+
+            error_verbose.appendChild(p3);
+
+
+            modal.style.display = "block";
+            span.onclick = function () {
+                modal.style.display = "none";
+                error_verbose.innerHTML = '';
+            }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    error_verbose.innerHTML = '';
+                }
+            }
+        })
+
+        ipcRenderer.on("send_information", (e, item) => {
+            document.body.innerHTML += item
+        })
+        ipcRenderer.send("Ready_to_add");
+    </script>
+
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="error_verbose"></p>
+        </div>
+    </div>
+    </div>
+    <div id="window" class="light">
+        <div id="inner">
+
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function () {
+            modal.style.display = "none";
+            document.getElementById('error_verbose').innerHTML = "";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById('error_verbose').innerHTML = "";
+            }
+        }
+    </script>
+</body>
+
+</html>
