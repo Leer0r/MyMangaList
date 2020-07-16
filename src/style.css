@@ -27,6 +27,35 @@ body::-webkit-scrollbar-thumb {
 
 /* FENETRE */
 
+#search_container {
+  position: absolute;
+  top: -50px;
+  right: 20px;
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  transition-property: top;
+  transition-duration: 1s;
+}
+
+#search_container #input_search {
+  width: 70%;
+  height: 30px;
+  font-family: "Changa", "Courier New", Courier, monospace;
+  border: none;
+  font-size: 1.2em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+#search_container #submit_search {
+  width: 10%;
+  height: 33px;
+  border: none;
+  background: center/70% url("./ressource/search/search.png") no-repeat red;
+}
+
 #window #inner {
   overflow: auto;
   height: 100%;

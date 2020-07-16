@@ -388,7 +388,13 @@
             if (item["defaultTheme"] === "dark") {
                 document.querySelector("#window").classList.toggle("light");
             }
-            console.log(item)
+        })
+        ipcRenderer.on("searchManga", () => {
+            let input_window = document.querySelector("#search_container");
+            let input_search = document.querySelector("#input_search");
+            let submit_search = document.querySelector("#submit_search");
+            input_window.style.top = '0';
+            input_search.focus();
         })
         ipcRenderer.send("Ready_to_add");
     </script>
@@ -407,6 +413,10 @@
 
         </div>
     </div>
+    <div id="search_container">
+        <input type="text" id="input_search" value="">
+        <button id="submit_search"></button>
+    </div>
     <script>
         var modal = document.getElementById("myModal");
         var span = document.getElementsByClassName("close")[0];
@@ -418,6 +428,35 @@
             if (event.target == modal) {
                 modal.style.display = "none";
                 document.getElementById('error_verbose').innerHTML = "";
+            }
+        }
+
+        let input_window = document.querySelector("#search_container");
+        let input_search = document.querySelector("#input_search");
+        let submit_search = document.querySelector("#submit_search");
+
+        submit_search.onclick = function (event) {
+            let manga_name_search = input_search.value.toLowerCase();
+            input_window.style.top = "-50px";
+            input_search.value = "";
+            document.querySelectorAll(".global_div").forEach(element => {
+                element.style.display = "block";
+                let manga_name = element.childNodes[2].childNodes[0].innerText.toLowerCase()
+                if (!(manga_name.includes(manga_name_search))) {
+                    element.style.display = "none";
+                }
+            })
+        }
+        input_search.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                submit_search.click();
+            }
+        })
+        window.onclick = function (event) {
+            if (event.target == input_window) {
+                modal.style.top = "-50px";
+                input_search.value = "";
             }
         }
     </script>

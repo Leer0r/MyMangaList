@@ -278,6 +278,20 @@ const mainMenuTemplate = [{
         click() {
             changeTheme();
         }
+    },
+    {
+        label: "Rechercher un manga",
+        accelerator: 'CommandOrControl+F',
+        click() {
+            searchManga();
+        }
+    },
+    {
+        label: 'recharger la page',
+        accelerator: "CommandOrControl+R",
+        click() {
+            mainWindow.reload();
+        }
     }
     ],
 },
@@ -324,4 +338,8 @@ function changeTheme() {
     usr_preferences["defaultTheme"] = usr_preferences["defaultTheme"] === "light" ? "dark" : "light";
     fs.writeFile(path.join(__dirname, "./ressource/usr_preferences/usr_preferences.json"), JSON.stringify(usr_preferences, null, 4));
     mainWindow.webContents.send("changeTheme")
+}
+
+function searchManga() {
+    mainWindow.webContents.send("searchManga");
 }

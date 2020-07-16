@@ -87,3 +87,7 @@ typings/
 
 # Electron-Forge
 out/
+
+#data
+src/data
+!src/data/local_data
