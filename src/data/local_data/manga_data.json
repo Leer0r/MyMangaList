@@ -13,7 +13,7 @@
     "one-punch+man": {
         "manga_name": "One-punch man",
         "scan": "19",
-        "link": "https://www.nautiljon.com/mangas/one-punch+man.html",
+        "link": "https://www.japscan.co/manga/one-punch-man/",
         "appreciation": "Bof",
         "comment": "Pas trop mal",
         "manga_local_name": "one-punch+man",
@@ -64,5 +64,16 @@
         "img_path": "https://www.nautiljon.com/images/manga/00/71/mini/gijin_15417.jpg?10",
         "synopsis": "Un champignon parasite tuant tous les insectes prit d'attaque les humains... \rL'histoire commence lorsque Kiriko, une lycenne est soudainement agresse par un homme dans la gare. Cet homme n'tait pas normal, petit  petit il se transformait en monstre, semblable  un insecte. Sta, un camarade de classe et membre du club de biologie aida cette dernire s'en sortir. Une fois rentre chez-elle, Kiriko ne s'attendait pas  ce que son calvaire perdure...",
         "request_path": "https://www.nautiljon.com/mangas/gijin.html"
+    },
+    "doronkyuu": {
+        "manga_name": "Doronkyuu",
+        "scan": 0,
+        "link": "",
+        "appreciation": "Pas vu",
+        "comment": "",
+        "manga_local_name": "doronkyuu",
+        "img_path": "https://www.nautiljon.com/images/manga/00/14/mini/doronkyuu_15441.jpg?10",
+        "synopsis": "La jeune Sakura Kaho possde un don quelque peu particulier : depuis qu'elle est enfant, elle est capable de voir les monstres et les fantmes ! La pauvre Sakura, qui est constamment terrifie par ce qu'elle voit, est oblige de vivre avec ce \"don\" tous les jours. Et  sa grande tristesse, sa nature peureuse fait que les fantmes ne font que l'aimer davantage.  \rIl n'y a qu'une seule personne qui profite de cette situation : Aki, la meilleure amie de Sakura, qui elle n'a peur de rien. Bien qu'elle ne soit pas capable de voir les esprits, cela ne l'empche pas de s'en amuser grandement, au dtriment de son amie !",
+        "request_path": "https://www.nautiljon.com/mangas/doronkyuu.html"
     }
 }

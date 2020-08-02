@@ -337,6 +337,11 @@
             a1.setAttribute("href", "https://www.nautiljon.com/");
             a1.textContent = "https://www.nautiljon.com/";
 
+            a1.click = function (e) {
+                e.preventDefault;
+                ipcRenderer.send("Read_manga",a1.href);
+            }
+
             error_verbose.appendChild(a1)
 
             //Second line break
@@ -356,6 +361,10 @@
             let a2 = document.createElement("a");
             a2.setAttribute("href", `"https://www.nautiljon.com/search.php?q=${item["manga_search_name"]}"`)
             a2.innerText = `"https://www.nautiljon.com/search.php?q=${item["manga_search_name"]}"`;
+
+            a2.addEventListener("click", (e) => {
+                e.preventDefault;
+            })
 
             error_verbose.appendChild(a2);
 

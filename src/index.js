@@ -107,6 +107,9 @@ function createAddWindow() {
         })
     );
     addWindow.on("closed", function () {
+        const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+        //instert menu
+        Menu.setApplicationMenu(mainMenu);
         addWindow = null;
     });
     const addMenu = Menu.buildFromTemplate(addMenuTemplate);
@@ -124,6 +127,10 @@ ipcMain.on("Read_manga", function (e, external_link) {
 ipcMain.on("Ready_to_add", function () {
     loadPreference();
     loadManga();
+})
+
+ipcMain.on("debug", function (item) {
+    console.log(item)
 })
 
 ipcMain.on("scan:add", function (e, manga_name) {
