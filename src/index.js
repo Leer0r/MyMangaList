@@ -221,6 +221,7 @@ ipcMain.on("manga:add", function (e, item) {
             let content = JSON.parse(file);
             item["synopsis"] = content.synopsis;
             mainWindow.webContents.send("manga:add", item);
+            fs.unlink(path.join(__dirname, `${data_path}${manga_name}/data.json`));
             console.log(item)
             let file_user_data = fs.readFileSync(
                 path.join(__dirname, data_path, manga_name, "/user_data.json")
